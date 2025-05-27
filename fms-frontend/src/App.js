@@ -4,7 +4,9 @@ import Navbar from './components/Navbar';
 import Home from './pages/home';
 import Addcrop from './pages/crop management/addcrop';
 import Stock from './pages/stock/stock';
-import Expenses from './pages/expenses/expenses';
+import Mainexpenses from './pages/expenses/mainexpenses';
+import IncomeForm from './pages/expenses/IncomeForm';
+import ExpenseForm from './pages/expenses/ExpenseForm';
 
 function App() {
   return (
@@ -15,7 +17,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/addcrop" element={<Addcrop />} />
           <Route path="/stock" element={<Stock />} />
-          <Route path="/expenses" element={<Expenses />} />
+          <Route path="/mainexpenses" element={<Mainexpenses/>} />
+          <Route path="/income" element={<IncomeForm />} />
+          <Route path="/expense" element={<ExpenseForm />} />
         </Routes>
       
     </BrowserRouter>

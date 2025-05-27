@@ -8,7 +8,7 @@ function Navbar() {
         <nav className="flex space-x-16 font-bold text-white">
           <Link to="/" className="hover:underline">Home</Link>
           <Link to="/addcrop" className="hover:underline">Crop Management</Link>
-          <Link to="/expenses" className="hover:underline">Expense & Income</Link>
+          <Link to="/mainexpenses" className="hover:underline">Expense & Income</Link>
           <Link to="/stock" className="hover:underline">Stock Management</Link>
         </nav>
       </div>
