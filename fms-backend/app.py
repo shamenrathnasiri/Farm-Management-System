@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 import pymysql
+from sqlalchemy import func  # Added for aggregate functions
 
 pymysql.install_as_MySQLdb()
 
@@ -126,8 +127,21 @@ def add_expense():
         return jsonify({"message": "Expense added successfully", "expense": expense.to_dict()}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 400
-    
-    
+
+# --- Endpoint to get income vs expense summary for pie chart ---
+@app.route('/api/finance-summary', methods=['GET'])
+def get_finance_summary():
+    try:
+        total_income = db.session.query(func.sum(Income.amount)).scalar() or 0
+        total_expense = db.session.query(func.sum(Expense.amount)).scalar() or 0
+
+        return jsonify({
+            "total_income": total_income,
+            "total_expense": total_expense
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 # --- Run Server ---
 if __name__ == '__main__':
     with app.app_context():
