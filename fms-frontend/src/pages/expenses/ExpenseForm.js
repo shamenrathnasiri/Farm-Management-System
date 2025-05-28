@@ -3,13 +3,20 @@ import axios from 'axios';
 
 function ExpenseForm() {
   const [expense, setExpense] = useState({ date: '', category: '', amount: '', notes: '' });
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => setExpense({ ...expense, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:5000/api/expense', expense);
-    alert('Expense added!');
+    setError(null);
+    try {
+      await axios.post('http://localhost:5000/api/expense', expense);
+      alert('Expense added!');
+      setExpense({ date: '', category: '', amount: '', notes: '' });
+    } catch (err) {
+      setError(err.response?.data?.error || 'Something went wrong');
+    }
   };
 
   return (
@@ -25,9 +32,10 @@ function ExpenseForm() {
           <input
             name="date"
             type="date"
+            value={expense.date}
             onChange={handleChange}
             required
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
           />
         </div>
 
@@ -36,9 +44,10 @@ function ExpenseForm() {
           <input
             name="category"
             placeholder="Category"
+            value={expense.category}
             onChange={handleChange}
             required
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
           />
         </div>
 
@@ -48,9 +57,10 @@ function ExpenseForm() {
             name="amount"
             type="number"
             placeholder="Amount"
+            value={expense.amount}
             onChange={handleChange}
             required
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
           />
         </div>
 
@@ -59,15 +69,18 @@ function ExpenseForm() {
           <textarea
             name="notes"
             placeholder="Notes"
+            value={expense.notes}
             onChange={handleChange}
             rows="3"
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
           />
         </div>
 
+        {error && <p className="text-red-500">{error}</p>}
+
         <button
           type="submit"
-          className="w-full px-4 py-2 text-white transition duration-200 bg-blue-500 rounded-lg hover:bg-blue-600"
+          className="w-full px-4 py-2 text-white transition duration-200 bg-green-500 rounded-lg hover:bg-green-600"
         >
           Add Expense
         </button>

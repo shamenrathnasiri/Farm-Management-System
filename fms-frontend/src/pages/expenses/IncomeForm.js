@@ -8,8 +8,14 @@ function IncomeForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:5000/api/income', income);
-    alert('Income added!');
+    try {
+      await axios.post('http://localhost:5000/api/income', income);
+      alert('Income added!');
+      setIncome({ date: '', source: '', amount: '', notes: '' });
+    } catch (error) {
+      alert('Error adding income');
+      console.error(error);
+    }
   };
 
   return (
@@ -25,6 +31,7 @@ function IncomeForm() {
           <input
             name="date"
             type="date"
+            value={income.date}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
@@ -36,6 +43,7 @@ function IncomeForm() {
           <input
             name="source"
             placeholder="Source"
+            value={income.source}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
@@ -48,6 +56,7 @@ function IncomeForm() {
             name="amount"
             type="number"
             placeholder="Amount"
+            value={income.amount}
             onChange={handleChange}
             required
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
@@ -59,6 +68,7 @@ function IncomeForm() {
           <textarea
             name="notes"
             placeholder="Notes"
+            value={income.notes}
             onChange={handleChange}
             rows="3"
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
