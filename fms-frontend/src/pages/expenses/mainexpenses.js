@@ -17,6 +17,7 @@ function MainExpenses() {
     Go to Income Form
   </button>
 
+
   <button
     onClick={() => navigate('/expense')}
     className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
