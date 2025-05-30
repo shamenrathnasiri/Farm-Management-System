@@ -1,35 +1,42 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import FinancePieChart from './FinancePieChart'; 
+import FinancePieChart from './FinancePieChart';
+import bgimg from '../../images/expensmg.jpg';
 
 function MainExpenses() {
   const navigate = useNavigate();
 
   return (
-    <div className="p-4 mt-32">
-      <h1 className="items-center mb-4 text-xl font-bold text-center">Farm Expenses Dashboard</h1>
+    <div className="relative flex items-center justify-center min-h-screen overflow-hidden">
+      <div
+        className="absolute inset-0 bg-center bg-cover brightness-50 blur-sm"
+        style={{ backgroundImage: `url(${bgimg})` }}
+      />
+      
+      <div className="relative z-10 p-4 mt-32">
+        <h1 className="mb-6 text-3xl font-bold text-center text-white drop-shadow-lg">
+           Farm Expenses Dashboard
+        </h1>
 
-     <div className="flex items-center justify-center mb-8 space-x-4">
-  <button
-    onClick={() => navigate('/income')}
-    className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
-  >
-    Go to Income Form
-  </button>
+        <div className="flex items-center justify-center mb-10 space-x-6">
+          <button
+            onClick={() => navigate('/income')}
+            className="px-5 py-2.5 text-lg font-semibold text-white bg-green-600 rounded-lg hover:bg-green-700 transition"
+          >
+             Go to Income Form
+          </button>
 
+          <button
+            onClick={() => navigate('/expense')}
+            className="px-5 py-2.5 text-lg font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition"
+          >
+            Go to Expense Form
+          </button>
+        </div>
 
-  <button
-    onClick={() => navigate('/expense')}
-    className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-  >
-    Go to Expense Form
-  </button>
-</div>
-
-
-      {/* Pie Chart Section */}
-      <div className="p-4 bg-white rounded shadow">
-        <FinancePieChart />
+        <div className="max-w-3xl p-12 mx-auto -mt-4 bg-white shadow-xl rounded-2xl">
+          <FinancePieChart />
+        </div>
       </div>
     </div>
   );

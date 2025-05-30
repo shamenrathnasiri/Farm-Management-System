@@ -1,4 +1,4 @@
-// src/components/AddCrop.jsx
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import bgimg from '../../images/cropmg.jpg';
@@ -22,7 +22,7 @@ const AddCrop = ({ onCropAdded }) => {
     try {
       const response = await axios.post('http://localhost:5000/api/crops', formData);
       console.log('Crop added:', response.data);
-      onCropAdded?.(); // Safe check
+      onCropAdded?.();
       setFormData({
         name: '',
         crop_type: '',
@@ -42,96 +42,54 @@ const AddCrop = ({ onCropAdded }) => {
       className="relative flex items-center justify-center min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${bgimg})` }}
     >
-      {/* Overlay */}
-      <div className="absolute inset-0 z-0 bg-black bg-opacity-50" />
+      
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-black/60 to-green-900/70" />
 
       {/* Form Card */}
-      <div className="relative w-full max-w-4xl p-10 mt-32 shadow-2xl h-[650px] bg-white/70 backdrop-blur-md rounded-2xl">
-        <h2 className="mb-8 text-4xl font-bold text-center text-green-700">🌾 Add New Crop</h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          
-          {/* Crop Name */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 ">Crop Name</label>
-            <input
-              name="name"
-              placeholder="Enter crop name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="p-3 text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-          </div>
+      <div className="relative z-10 w-full max-w-4xl p-6 mt-24 border shadow-2xl backdrop-blur-md bg-white/60 rounded-xl border-white/30">
+        <h2 className=" text-[30px] font-extrabold text-center text-green-800 drop-shadow-md">🌾 Add New Crop</h2>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-8 md:grid-cols-2">
 
-          {/* Crop Type */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700">Crop Type</label>
-            <input
-              name="crop_type"
-              placeholder="Enter crop type"
-              value={formData.crop_type}
-              onChange={handleChange}
-              required
-              className="p-3 text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-          </div>
-
-          {/* Planted Date */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 ">Planted Date</label>
-            <input
-              name="planted_date"
-              type="date"
-              value={formData.planted_date}
-              onChange={handleChange}
-              required
-              className="p-3 text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-          </div>
-
-          {/* Harvest Date */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 ">Harvest Date</label>
-            <input
-              name="harvest_date"
-              type="date"
-              value={formData.harvest_date}
-              onChange={handleChange}
-              className="p-3 text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-          </div>
-
-          {/* Quantity */}
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 ">Quantity (kg)</label>
-            <input
-              name="quantity"
-              type="number"
-              placeholder="Enter quantity"
-              value={formData.quantity}
-              onChange={handleChange}
-              className="p-3 text-base border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-          </div>
+          {/* Input Field Template */}
+          {[
+            { label: 'Crop Name', name: 'name', placeholder: 'Enter crop name', type: 'text' },
+            { label: 'Crop Type', name: 'crop_type', placeholder: 'Enter crop type', type: 'text' },
+            { label: 'Planted Date', name: 'planted_date', type: 'date' },
+            { label: 'Harvest Date', name: 'harvest_date', type: 'date' },
+            { label: 'Quantity (kg)', name: 'quantity', placeholder: 'Enter quantity', type: 'number' }
+          ].map(({ label, name, placeholder, type }) => (
+            <div key={name} className="flex flex-col">
+              <label className="mb-1 text-sm font-semibold text-gray-800">{label}</label>
+              <input
+                name={name}
+                type={type}
+                placeholder={placeholder}
+                value={formData[name]}
+                onChange={handleChange}
+                required={name !== 'harvest_date'} 
+                className="p-3 text-base transition-all border border-gray-300 shadow-inner rounded-xl focus:outline-none focus:ring-4 focus:ring-green-400 focus:border-green-500"
+              />
+            </div>
+          ))}
 
           {/* Notes */}
           <div className="flex flex-col md:col-span-2">
-            <label className="-mt-8 text-sm font-medium text-gray-700 ">Notes</label>
+            <label className="mb-2 text-sm font-semibold text-gray-800">Notes</label>
             <textarea
               name="notes"
               placeholder="Additional notes"
               value={formData.notes}
               onChange={handleChange}
               rows="4"
-              className="w-full -mt-8 text-base border border-gray-300 rounded-lg shadow-sm resize-none focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="p-3 text-base transition-all border border-gray-300 shadow-inner resize-none rounded-xl focus:outline-none focus:ring-4 focus:ring-green-400 focus:border-green-500"
             ></textarea>
           </div>
 
           {/* Submit Button */}
-          <div className="">
+          <div className="md:col-span-2">
             <button
               type="submit"
-              className="w-full text-lg font-semibold text-white transition duration-200 bg-green-600 rounded-lg shadow hover:bg-green-700"
+              className="w-full py-3 text-xl font-bold tracking-wide text-white transition duration-300 transform shadow-md bg-gradient-to-r from-green-600 to-green-800 rounded-xl hover:from-green-500 hover:to-green-700 hover:scale-105"
             >
                Add Crop
             </button>

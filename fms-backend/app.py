@@ -70,6 +70,74 @@ class Expense(db.Model):
             "amount": self.amount,
             "notes": self.notes,
         }
+        
+# --- Stock Model ---
+class Stock(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    category = db.Column(db.String(100), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    unit = db.Column(db.String(20), nullable=False)
+    purchase_date = db.Column(db.Date, nullable=True)
+    expiry_date = db.Column(db.Date, nullable=True)
+    supplier = db.Column(db.String(100), nullable=True)
+    min_quantity = db.Column(db.Integer, nullable=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "category": self.category,
+            "quantity": self.quantity,
+            "unit": self.unit,
+            "purchase_date": self.purchase_date.strftime('%Y-%m-%d') if self.purchase_date else None,
+            "expiry_date": self.expiry_date.strftime('%Y-%m-%d') if self.expiry_date else None,
+            "supplier": self.supplier,
+            "min_quantity": self.min_quantity,
+        }
+
+# --- Endpoint to get all stock ---
+@app.route('/api/stock', methods=['GET'])
+def get_all_stock():
+    try:
+        stocks = Stock.query.all()
+        return jsonify([stock.to_dict() for stock in stocks]), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# --- Endpoint to add new stock ---
+@app.route('/api/stock', methods=['POST'])
+def add_stock():
+    data = request.json
+    try:
+        new_stock = Stock(
+            name=data['name'],
+            category=data['category'],
+            quantity=int(data['quantity']),
+            unit=data['unit'],
+            purchase_date=datetime.strptime(data['purchase_date'], '%Y-%m-%d').date() if data['purchase_date'] else None,
+            expiry_date=datetime.strptime(data['expiry_date'], '%Y-%m-%d').date() if data['expiry_date'] else None,
+            supplier=data.get('supplier'),
+            min_quantity=int(data['min_quantity']) if data.get('min_quantity') else 0
+        )
+        db.session.add(new_stock)
+        db.session.commit()
+        return jsonify({"message": "Stock added successfully", "stock": new_stock.to_dict()}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+# --- Endpoint to delete stock by id ---
+@app.route('/api/stock/<int:stock_id>', methods=['DELETE'])
+def delete_stock(stock_id):
+    try:
+        stock = Stock.query.get(stock_id)
+        if not stock:
+            return jsonify({"error": "Stock not found"}), 404
+        db.session.delete(stock)
+        db.session.commit()
+        return jsonify({"message": "Stock deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # --- Endpoint to add crop ---
 @app.route('/api/crops', methods=['POST'])
