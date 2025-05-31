@@ -3,20 +3,22 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 import pymysql
-from sqlalchemy import func  # Added for aggregate functions
+from sqlalchemy import func
 
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 CORS(app)
 
-# MySQL DB config 
+# MySQL DB Config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/cropdb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# --- Crop Model ---
+# --- Models ---
+
+# Crop Model
 class Crop(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -37,7 +39,7 @@ class Crop(db.Model):
             "notes": self.notes,
         }
 
-# --- Income Model ---
+# Income Model
 class Income(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
@@ -54,7 +56,7 @@ class Income(db.Model):
             "notes": self.notes,
         }
 
-# --- Expense Model ---
+# Expense Model
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)
@@ -70,8 +72,8 @@ class Expense(db.Model):
             "amount": self.amount,
             "notes": self.notes,
         }
-        
-# --- Stock Model ---
+
+# Stock Model
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -96,50 +98,18 @@ class Stock(db.Model):
             "min_quantity": self.min_quantity,
         }
 
-# --- Endpoint to get all stock ---
-@app.route('/api/stock', methods=['GET'])
-def get_all_stock():
+# --- API Endpoints ---
+
+# Get all crops
+@app.route('/api/crops', methods=['GET'])
+def get_all_crops():
     try:
-        stocks = Stock.query.all()
-        return jsonify([stock.to_dict() for stock in stocks]), 200
+        crops = Crop.query.all()
+        return jsonify([crop.to_dict() for crop in crops]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# --- Endpoint to add new stock ---
-@app.route('/api/stock', methods=['POST'])
-def add_stock():
-    data = request.json
-    try:
-        new_stock = Stock(
-            name=data['name'],
-            category=data['category'],
-            quantity=int(data['quantity']),
-            unit=data['unit'],
-            purchase_date=datetime.strptime(data['purchase_date'], '%Y-%m-%d').date() if data['purchase_date'] else None,
-            expiry_date=datetime.strptime(data['expiry_date'], '%Y-%m-%d').date() if data['expiry_date'] else None,
-            supplier=data.get('supplier'),
-            min_quantity=int(data['min_quantity']) if data.get('min_quantity') else 0
-        )
-        db.session.add(new_stock)
-        db.session.commit()
-        return jsonify({"message": "Stock added successfully", "stock": new_stock.to_dict()}), 201
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
-
-# --- Endpoint to delete stock by id ---
-@app.route('/api/stock/<int:stock_id>', methods=['DELETE'])
-def delete_stock(stock_id):
-    try:
-        stock = Stock.query.get(stock_id)
-        if not stock:
-            return jsonify({"error": "Stock not found"}), 404
-        db.session.delete(stock)
-        db.session.commit()
-        return jsonify({"message": "Stock deleted successfully"}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-# --- Endpoint to add crop ---
+# Add crop
 @app.route('/api/crops', methods=['POST'])
 def add_crop():
     data = request.json
@@ -162,7 +132,63 @@ def add_crop():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-# --- Endpoint to add income ---
+# Delete crop
+@app.route('/api/crops/<int:crop_id>', methods=['DELETE'])
+def delete_crop(crop_id):
+    try:
+        crop = Crop.query.get(crop_id)
+        if not crop:
+            return jsonify({'error': 'Crop not found'}), 404
+        db.session.delete(crop)
+        db.session.commit()
+        return jsonify({'message': 'Crop deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Get all stock
+@app.route('/api/stock', methods=['GET'])
+def get_all_stock():
+    try:
+        stocks = Stock.query.all()
+        return jsonify([stock.to_dict() for stock in stocks]), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+# Add stock
+@app.route('/api/stock', methods=['POST'])
+def add_stock():
+    data = request.json
+    try:
+        new_stock = Stock(
+            name=data['name'],
+            category=data['category'],
+            quantity=int(data['quantity']),
+            unit=data['unit'],
+            purchase_date=datetime.strptime(data['purchase_date'], '%Y-%m-%d').date() if data.get('purchase_date') else None,
+            expiry_date=datetime.strptime(data['expiry_date'], '%Y-%m-%d').date() if data.get('expiry_date') else None,
+            supplier=data.get('supplier'),
+            min_quantity=int(data['min_quantity']) if data.get('min_quantity') else 0
+        )
+        db.session.add(new_stock)
+        db.session.commit()
+        return jsonify({"message": "Stock added successfully", "stock": new_stock.to_dict()}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+# Delete stock
+@app.route('/api/stock/<int:stock_id>', methods=['DELETE'])
+def delete_stock(stock_id):
+    try:
+        stock = Stock.query.get(stock_id)
+        if not stock:
+            return jsonify({"error": "Stock not found"}), 404
+        db.session.delete(stock)
+        db.session.commit()
+        return jsonify({"message": "Stock deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Add income
 @app.route('/api/income', methods=['POST'])
 def add_income():
     data = request.json
@@ -179,7 +205,7 @@ def add_income():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-# --- Endpoint to add expense ---
+# Add expense
 @app.route('/api/expense', methods=['POST'])
 def add_expense():
     data = request.json
@@ -196,13 +222,12 @@ def add_expense():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-# --- Endpoint to get income vs expense summary for pie chart ---
+# Get income vs expense summary
 @app.route('/api/finance-summary', methods=['GET'])
 def get_finance_summary():
     try:
         total_income = db.session.query(func.sum(Income.amount)).scalar() or 0
         total_expense = db.session.query(func.sum(Expense.amount)).scalar() or 0
-
         return jsonify({
             "total_income": total_income,
             "total_expense": total_expense
@@ -213,5 +238,5 @@ def get_finance_summary():
 # --- Run Server ---
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Creates tables if they don't exist
+        db.create_all()
     app.run(debug=True)

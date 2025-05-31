@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import FinancePieChart from './FinancePieChart';
-import bgimg from '../../images/expensmg.jpg';
+import bgimg from '../../images/expensmg.jpg'
+
 
 function MainExpenses() {
   const navigate = useNavigate();

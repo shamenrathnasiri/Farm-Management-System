@@ -1,11 +1,10 @@
 import React from 'react';
 import bg1 from '../images/homebg.jpg';
+import { useNavigate } from 'react-router-dom';
+
 
 function Home() {
-
-  const handleclick = () => {
-    alert('Button clicked!');
-  };
+  const navigate = useNavigate();
 
   return (
     <div
@@ -21,7 +20,7 @@ function Home() {
           WELCOME TO FARM MANAGEMENT SYSTEM
         </h1>
         <button
-          onClick={handleclick}
+          onClick={() => navigate('/viewall')}
           className="px-6 py-2 font-bold text-white bg-teal-600 rounded-md hover:bg-teal-800"
         >
           View All Details

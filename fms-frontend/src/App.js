@@ -7,6 +7,7 @@ import Stock from './pages/stock/stock';
 import Mainexpenses from './pages/expenses/mainexpenses';
 import IncomeForm from './pages/expenses/IncomeForm';
 import ExpenseForm from './pages/expenses/ExpenseForm';
+import Viewall from './pages/view all/view';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/mainexpenses" element={<Mainexpenses/>} />
           <Route path="/income" element={<IncomeForm />} />
           <Route path="/expense" element={<ExpenseForm />} />
+          <Route path="/viewall" element={<Viewall />} />
         </Routes>
       
     </BrowserRouter>
