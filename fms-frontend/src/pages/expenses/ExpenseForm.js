@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import {
+  FaCalendarAlt,
+  FaListAlt,
+  FaMoneyBillWave,
+  FaStickyNote
+} from 'react-icons/fa';
 
 function ExpenseForm() {
   const [expense, setExpense] = useState({ date: '', category: '', amount: '', notes: '' });
@@ -28,7 +34,10 @@ function ExpenseForm() {
         <h2 className="text-2xl font-semibold text-center text-gray-700">Add Expense</h2>
 
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-600">Date</label>
+          <label className="flex items-center mb-1 text-sm font-medium text-gray-600">
+            <FaCalendarAlt className="mr-2 text-green-500" />
+            Date
+          </label>
           <input
             name="date"
             type="date"
@@ -40,7 +49,10 @@ function ExpenseForm() {
         </div>
 
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-600">Category</label>
+          <label className="flex items-center mb-1 text-sm font-medium text-gray-600">
+            <FaListAlt className="mr-2 text-green-500" />
+            Category
+          </label>
           <input
             name="category"
             placeholder="Category"
@@ -52,7 +64,10 @@ function ExpenseForm() {
         </div>
 
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-600">Amount</label>
+          <label className="flex items-center mb-1 text-sm font-medium text-gray-600">
+            <FaMoneyBillWave className="mr-2 text-green-500" />
+            Amount
+          </label>
           <input
             name="amount"
             type="number"
@@ -65,7 +80,10 @@ function ExpenseForm() {
         </div>
 
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-600">Notes</label>
+          <label className="flex items-center mb-1 text-sm font-medium text-gray-600">
+            <FaStickyNote className="mr-2 text-green-500" />
+            Notes
+          </label>
           <textarea
             name="notes"
             placeholder="Notes"

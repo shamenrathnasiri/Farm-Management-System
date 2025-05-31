@@ -69,7 +69,7 @@ const FinancePieChart = () => {
   return (
     <div className="max-w-xl p-12 mx-auto mt-10 transition-all duration-500 bg-white shadow-xl rounded-3xl hover:shadow-2xl">
       <h2 className="mb-6 text-3xl font-extrabold tracking-wide text-center text-gray-800">
-        📊 Finance Summary
+        Finance Summary
       </h2>
 
       <ResponsiveContainer width="100%" height={350}>

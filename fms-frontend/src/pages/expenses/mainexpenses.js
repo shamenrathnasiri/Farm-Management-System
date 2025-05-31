@@ -15,7 +15,7 @@ function MainExpenses() {
 
       <div className="relative z-10 flex flex-col items-center w-full p-8 mt-32 space-y-12 max-w-7xl md:flex-row md:items-start md:space-y-0 md:space-x-16">
         <div className="flex flex-col w-full max-w-xs space-y-6">
-          <h1 className="mb-6 text-3xl font-bold text-center text-white drop-shadow-lg md:text-left">
+          <h1 className="mt-40 mb-6 text-3xl font-bold text-center text-white drop-shadow-lg md:text-left">
             Farm Expenses Dashboard
           </h1>
 
@@ -34,7 +34,7 @@ function MainExpenses() {
           </button>
         </div>
 
-        <div className="flex-1 max-w-4xl p-12 bg-white shadow-xl rounded-2xl">
+        <div className="flex-1 max-w-4xl p-12 shadow-xl rounded-2xl">
           <FinancePieChart />
         </div>
       </div>

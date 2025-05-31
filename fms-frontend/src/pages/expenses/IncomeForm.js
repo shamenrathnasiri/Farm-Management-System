@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import {
+  FaCalendarAlt,
+  FaMoneyBillWave,
+  FaWallet,
+  FaStickyNote,
+} from 'react-icons/fa';
 
 function IncomeForm() {
   const [income, setIncome] = useState({ date: '', source: '', amount: '', notes: '' });
@@ -27,7 +33,10 @@ function IncomeForm() {
         <h2 className="text-2xl font-semibold text-center text-gray-700">Add Income</h2>
 
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-600">Date</label>
+          <label className="flex items-center mb-1 text-sm font-medium text-gray-600">
+            <FaCalendarAlt className="mr-2 text-green-500" />
+            Date
+          </label>
           <input
             name="date"
             type="date"
@@ -39,7 +48,10 @@ function IncomeForm() {
         </div>
 
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-600">Source</label>
+          <label className="flex items-center mb-1 text-sm font-medium text-gray-600">
+            <FaWallet className="mr-2 text-green-500" />
+            Source
+          </label>
           <input
             name="source"
             placeholder="Source"
@@ -51,7 +63,10 @@ function IncomeForm() {
         </div>
 
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-600">Amount</label>
+          <label className="flex items-center mb-1 text-sm font-medium text-gray-600">
+            <FaMoneyBillWave className="mr-2 text-green-500" />
+            Amount
+          </label>
           <input
             name="amount"
             type="number"
@@ -64,7 +79,10 @@ function IncomeForm() {
         </div>
 
         <div>
-          <label className="block mb-1 text-sm font-medium text-gray-600">Notes</label>
+          <label className="flex items-center mb-1 text-sm font-medium text-gray-600">
+            <FaStickyNote className="mr-2 text-green-500" />
+            Notes
+          </label>
           <textarea
             name="notes"
             placeholder="Notes"

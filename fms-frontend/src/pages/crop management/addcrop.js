@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import bgimg from '../../images/cropmg.jpg';
+import { Leaf, CalendarDays, ClipboardList, FileText, BarChart } from 'lucide-react';
 
 const AddCrop = ({ onCropAdded }) => {
   const [formData, setFormData] = useState({
@@ -36,61 +37,65 @@ const AddCrop = ({ onCropAdded }) => {
     }
   };
 
+  const fields = [
+    { label: 'Crop Name', name: 'name', placeholder: 'Enter crop name', type: 'text', icon: <Leaf size={16} /> },
+    { label: 'Crop Type', name: 'crop_type', placeholder: 'Enter crop type', type: 'text', icon: <ClipboardList size={16} /> },
+    { label: 'Planted Date', name: 'planted_date', type: 'date', icon: <CalendarDays size={16} /> },
+    { label: 'Harvest Date', name: 'harvest_date', type: 'date', icon: <CalendarDays size={16} /> },
+    { label: 'Quantity (kg)', name: 'quantity', placeholder: 'Enter quantity', type: 'number', icon: <BarChart size={16} /> }
+  ];
+
   return (
     <div
       className="relative flex items-center justify-center min-h-screen bg-center bg-cover"
       style={{ backgroundImage: `url(${bgimg})` }}
     >
-      
-      <div className="absolute inset-0 z-0 bg-gradient-to-br from-black/60 to-green-900/70" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-black/70 to-green-900/80" />
 
-      {/* Form Card */}
-      <div className="relative z-10 w-full max-w-4xl p-6 mt-24 border shadow-2xl backdrop-blur-md bg-white/60 rounded-xl border-white/30">
-        <h2 className=" text-[30px] font-extrabold text-center text-green-800 drop-shadow-md">🌾 Add New Crop</h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-8 md:grid-cols-2">
-
-          {/* Input Field Template */}
-          {[
-            { label: 'Crop Name', name: 'name', placeholder: 'Enter crop name', type: 'text' },
-            { label: 'Crop Type', name: 'crop_type', placeholder: 'Enter crop type', type: 'text' },
-            { label: 'Planted Date', name: 'planted_date', type: 'date' },
-            { label: 'Harvest Date', name: 'harvest_date', type: 'date' },
-            { label: 'Quantity (kg)', name: 'quantity', placeholder: 'Enter quantity', type: 'number' }
-          ].map(({ label, name, placeholder, type }) => (
-            <div key={name} className="flex flex-col">
-              <label className="mb-1 text-sm font-semibold text-gray-800">{label}</label>
+      <div className="relative z-10 w-full max-w-3xl px-6 py-8 mt-16 border shadow-lg bg-white/80 border-white/40 rounded-2xl backdrop-blur-md">
+        <h2 className="mb-6 text-2xl font-bold text-center text-green-900 drop-shadow-sm">
+          🌱 Add Crop
+        </h2>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {fields.map(({ label, name, placeholder, type, icon }) => (
+            <div key={name} className="flex flex-col space-y-1">
+              <label className="flex items-center gap-2 text-xs font-semibold text-green-900 select-none">
+                {icon}
+                {label}
+              </label>
               <input
                 name={name}
                 type={type}
                 placeholder={placeholder}
                 value={formData[name]}
                 onChange={handleChange}
-                required={name !== 'harvest_date'} 
-                className="p-3 text-base transition-all border border-gray-300 shadow-inner rounded-xl focus:outline-none focus:ring-4 focus:ring-green-400 focus:border-green-500"
+                required={name !== 'harvest_date'}
+                className="w-full px-3 py-2 text-sm text-gray-800 transition-all duration-150 bg-white border border-gray-300 rounded-lg shadow-inner focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500"
               />
             </div>
           ))}
 
-          {/* Notes */}
-          <div className="flex flex-col md:col-span-2">
-            <label className="mb-2 text-sm font-semibold text-gray-800">Notes</label>
+          <div className="flex flex-col sm:col-span-2">
+            <label className="flex items-center gap-2 mb-1 text-xs font-semibold text-green-900 select-none">
+              <FileText size={16} />
+              Notes
+            </label>
             <textarea
               name="notes"
-              placeholder="Additional notes"
+              placeholder="Add any additional notes about the crop..."
               value={formData.notes}
               onChange={handleChange}
-              rows="4"
-              className="p-3 text-base transition-all border border-gray-300 shadow-inner resize-none rounded-xl focus:outline-none focus:ring-4 focus:ring-green-400 focus:border-green-500"
+              rows="3"
+              className="w-full px-3 py-2 text-sm text-gray-800 transition-all duration-150 bg-white border border-gray-300 rounded-lg shadow-inner resize-none focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-500"
             ></textarea>
           </div>
 
-          {/* Submit Button */}
-          <div className="md:col-span-2">
+          <div className="sm:col-span-2">
             <button
               type="submit"
-              className="w-full py-3 text-xl font-bold tracking-wide text-white transition duration-300 transform shadow-md bg-gradient-to-r from-green-600 to-green-800 rounded-xl hover:from-green-500 hover:to-green-700 hover:scale-105"
+              className="w-full px-5 py-3 text-lg font-semibold text-white transition-transform duration-200 transform rounded-lg shadow-md bg-gradient-to-r from-green-600 to-green-800 hover:scale-105 hover:from-green-500 hover:to-green-700"
             >
-               Add Crop
+              Add Crop
             </button>
           </div>
         </form>
