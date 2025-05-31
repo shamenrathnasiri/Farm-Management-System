@@ -1,13 +1,58 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
 } from "recharts";
 
-const COLORS = ["#10B981", "#EF4444"]; // Tailwind green-500 and red-500 colors
+const COLORS = ["#34D399", "#F87171"]; // Tailwind green-400 and red-400 colors
+const RADIAN = Math.PI / 180;
+
+const renderCustomLabel = ({
+  cx, cy, midAngle, innerRadius, outerRadius, percent, name, value
+}) => {
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="#1F2937" // Tailwind text-gray-800
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+      style={{
+        fontFamily: "sans-serif",
+        fontWeight: "600",
+        fontSize: 14,
+        pointerEvents: "none",
+        userSelect: "none",
+        filter: "drop-shadow(0 0 2px rgba(255,255,255,0.85))",
+      }}
+    >
+      <tspan x={x} dy="0" fill="#111827" style={{ fontWeight: 700, fontSize: 15 }}>
+        {name}
+      </tspan>
+      <tspan x={x} dy="1.2em" fill="#059669" style={{ fontWeight: 700, fontSize: 14 }}>
+        Rs. {value.toLocaleString()}
+      </tspan>
+      <tspan x={x} dy="1.2em" fill="#10B981" style={{ fontWeight: 700, fontSize: 16 }}>
+        {`${(percent * 100).toFixed(0)}%`}
+      </tspan>
+    </text>
+  );
+};
 
 const FinancePieChart = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([
+    { name: "Income", value: 1 },
+    { name: "Expense", value: 1 }
+  ]);
 
   useEffect(() => {
     axios.get("http://localhost:5000/api/finance-summary")
@@ -18,43 +63,59 @@ const FinancePieChart = () => {
         ];
         setData(chartData);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("API fetch error:", err));
   }, []);
 
   return (
-    <div className="max-w-lg p-6 mx-auto mt-10 transition-shadow duration-500 bg-white rounded-lg shadow-lg hover:shadow-2xl">
-      <h2 className="mb-6 text-2xl font-bold text-center text-gray-800">
-        Total Income vs Expense
+    <div className="max-w-xl p-12 mx-auto mt-10 transition-all duration-500 bg-white shadow-xl rounded-3xl hover:shadow-2xl">
+      <h2 className="mb-6 text-3xl font-extrabold tracking-wide text-center text-gray-800">
+        📊 Finance Summary
       </h2>
-      <ResponsiveContainer width="100%" height={300}>
+
+      <ResponsiveContainer width="100%" height={350}>
         <PieChart>
           <Pie
             data={data}
+            cx="50%"
+            cy="50%"
+            labelLine={false}
+            label={renderCustomLabel}
+            outerRadius={120}
+            innerRadius={60}
             dataKey="value"
-            nameKey="name"
-            outerRadius={100}
-            fill="#8884d8"
-            label={({ name, percent }) =>
-              `${name}: ${(percent * 100).toFixed(0)}%`
-            }
             isAnimationActive={true}
-            animationDuration={1000}
+            animationDuration={1500}
           >
             {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
-                className="transition-opacity duration-300 cursor-pointer hover:opacity-80"
+                className="transition duration-300 cursor-pointer hover:opacity-80"
               />
             ))}
           </Pie>
+
           <Tooltip
-            formatter={(value) => value.toLocaleString(undefined, )}
+            contentStyle={{
+              backgroundColor: "#ffffff",
+              border: "1px solid #e5e7eb",
+              borderRadius: "0.5rem",
+              padding: "0.5rem",
+              fontSize: "0.875rem",
+              color: "#1f2937",
+              fontWeight: 500,
+            }}
+            formatter={(value) => [`Rs. ${value.toLocaleString()}`, ""]}
           />
+
           <Legend
             verticalAlign="bottom"
             height={36}
-            wrapperStyle={{ fontWeight: 'bold', fontSize: '1rem' }}
+            wrapperStyle={{
+              fontWeight: "bold",
+              fontSize: "1rem",
+              color: "#4B5563"
+            }}
           />
         </PieChart>
       </ResponsiveContainer>
