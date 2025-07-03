@@ -9,7 +9,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-const COLORS = ["#34D399", "#F87171"]; // Tailwind green-400 and red-400 colors
+const COLORS = ["#34D399", "#F87171"];
 const RADIAN = Math.PI / 180;
 
 const renderCustomLabel = ({

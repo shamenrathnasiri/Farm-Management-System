@@ -13,7 +13,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-     
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/addcrop" element={<Addcrop />} />
@@ -23,7 +23,7 @@ function App() {
           <Route path="/expense" element={<ExpenseForm />} />
           <Route path="/viewall" element={<Viewall />} />
         </Routes>
-      
+
     </BrowserRouter>
   );
 }

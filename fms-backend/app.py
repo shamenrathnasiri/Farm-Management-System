@@ -70,7 +70,7 @@ class Expense(db.Model):
             "amount": self.amount,
             "notes": self.notes,
         }
-        
+
 # --- Stock Model ---
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
