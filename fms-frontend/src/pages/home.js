@@ -24,7 +24,7 @@ function Home() {
         <p className='mb-6 -mt-4 text-white shadow-sm'>Welcome to Farm Management System</p>
         <button
           onClick={() => navigate('/viewall')}
-          className="px-6 py-2 font-bold text-white bg-teal-600 rounded-md hover:bg-teal-800"
+          className="px-6 py-2 font-bold text-white bg-teal-600 rounded-md hover:bg-te al-800"
         >
           View All Details
         </button>
