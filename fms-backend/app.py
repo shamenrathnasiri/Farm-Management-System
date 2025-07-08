@@ -1,16 +1,16 @@
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy # type: ignore
 from flask_cors import CORS
 from datetime import datetime
 import pymysql
-from sqlalchemy import func  # For aggregate functions like sum
+from sqlalchemy import func  # type: ignore # For aggregate functions like sum
 
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 CORS(app)
 
-# MySQL DB config 
+# MySQL DB config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/cropdb'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -231,7 +231,7 @@ def delete_crop(crop_id):
         return jsonify({'message': 'Crop deleted successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
     # --- Get all income entries ---
 @app.route('/api/income', methods=['GET'])
 def get_all_income():
@@ -249,7 +249,7 @@ def get_all_expense():
         return jsonify([expense.to_dict() for expense in expenses]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
 # --- Delete Income ---
 @app.route('/api/income/<int:income_id>', methods=['DELETE'])
 def delete_income(income_id):
@@ -282,5 +282,5 @@ def delete_expense(expense_id):
 # --- Run Server ---
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Creates tables if they don't exist
+        db.create_all()  # Creates tables if they don't exist (automatically )
     app.run(debug=True)
